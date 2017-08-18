@@ -1,4 +1,26 @@
-﻿/// <summary>
+﻿/*MIT License
+
+Copyright (c) 2017 Israel Barth Rubio
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*/
+
+/// <summary>
 /// Function to handle dragover event while dragging popups.
 /// </summary>
 /// <param name="p_event">Javascript Event Object.</param>
@@ -274,7 +296,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 
 						var v_html = 
 							'<div>' +
-							'    Deseja fechar a popup?' +
+							'    Deseja salvar as informações ao fechar a popup?' +
 							'</div>' +
 							'<br />' +
 							'<div>' +
@@ -315,7 +337,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 						}
 
 						var v_config = {
-							width: '205px',
+							width: '300px',
 							height: '125px',
 							resizable: false,
 							draggable: false,
@@ -1033,6 +1055,40 @@ function createPopUpControl(p_id, p_startZIndex) {
 				});
 			}
 
+			v_containerElement.addEventListener(
+				'mouseover',
+				function(p_event) {
+					if(this.v_popUpObject.config.draggable) {
+						var v_current = p_event.target;
+						var v_preventDrag;
+
+						while(v_current != this && !v_preventDrag) {
+							if(v_current.classList.contains('popup-prevent-container-drag')) {
+								v_preventDrag = true;
+							}
+
+							v_current = v_current.parentElement;
+						}
+
+						if(v_preventDrag) {
+							this.removeAttribute('draggable');
+						}
+						else {
+							this.draggable = true;
+						}
+					}
+				}
+			);
+
+			v_containerElement.addEventListener(
+				'mouseout',
+				function(p_event) {
+					if(this.v_popUpObject.config.draggable) {
+						this.draggable = true;
+					}
+				}
+			);
+
 			v_containerElement.v_popUpObject = v_popUpObject;
 
 			v_popUpObject.containerElement = v_containerElement;
@@ -1264,7 +1320,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		/// </summary> 
 		/// <param name="p_id">The id to be searched.</param>
 		/// <paramref name="p_id">Takes a String.
-		/// <returns>An javascript object representing the popup or null.</returns> kkkkkkkkkkkkkkk
+		/// <returns>An javascript object representing the popup or null.</returns> 
 		getPopUpById: function(p_id) {
 			for(var i = 0; i < this.popUpList.length; i++) {
 				if(this.popUpList[i].id == p_id) {
@@ -1325,16 +1381,24 @@ function createPopUpControl(p_id, p_startZIndex) {
 			var v_top = 0;
 			var v_left = 0;
 
+			var v_width = (window.innerWidth * 0.6) + 'px';
+			var v_height = (window.innerHeight * 0.6) + 'px';
+
 			var v_selectedPopUps = this.getSelectedPopUps();
 
 			for(var i = 0; i < v_selectedPopUps.length; i++) {
 				v_selectedPopUps[i].maximize();
 
-				v_top += 5;
-				v_left += 5;
+				if(i < 6) {
+					v_top += 5;
+					v_left += 5;
+				}
 
 				v_selectedPopUps[i].changePosition(v_top + '%', v_left + '%');
+				v_selectedPopUps[i].changeSize(v_width, v_height);
 			}
+
+			v_selectedPopUps[v_selectedPopUps.length - 1].turnActive();
 
 			this.maximizing = false;
 		},
@@ -1400,6 +1464,28 @@ function createPopUpControl(p_id, p_startZIndex) {
 			}
 		},
 	};
+
+	window.addEventListener(
+		'resize',
+		function(p_popUpControlObject, p_event) {
+			if(p_popUpControlObject.popUpList == null) {//If popup control was destroyed
+				return;
+			}
+
+			for(var i = 0; i < p_popUpControlObject.popUpList.length; i++) {
+				//Doesn't allow hide on right
+				if(window.innerWidth - p_popUpControlObject.popUpList[i].containerElement.offsetLeft < 55) {
+					p_popUpControlObject.popUpList[i].changePosition(null, (window.innerWidth - 55) + 'px');
+				}
+
+				//Doesn't allow hide on bottom
+				if(window.innerHeight - p_popUpControlObject.popUpList[i].containerElement.offsetTop < 110) {
+					p_popUpControlObject.popUpList[i].changePosition((window.innerHeight - 110) + 'px', null);
+				}
+			}
+		}.bind(window, v_popUpControlObject),
+		false
+	);
 
 	v_popUpControlObject.containerElement.removeEventListener(
 		'dragover',
