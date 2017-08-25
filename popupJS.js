@@ -24,17 +24,17 @@ SOFTWARE.*/
 /// Function to handle dragover event while dragging popups.
 /// </summary>
 /// <param name="p_event">Javascript Event Object.</param>
-var gv_popUpdragOverFunction = function(p_event) { 
-    p_event.preventDefault(); 
+var gv_popUpdragOverFunction = function(p_event) {
+    p_event.preventDefault();
 
-    return false; 
+    return false;
 }
 
 /// <summary>
 /// Function to handle drop event while dragging popups.
 /// </summary>
 /// <param name="p_event">Javascript Event Object.</param>
-var gv_popUpDropFunction = function(p_event) { 
+var gv_popUpDropFunction = function(p_event) {
     var v_parameters = p_event.dataTransfer.getData('text/plain').split(',');
     var v_popUpContainer = document.getElementById(v_parameters[2]);
 
@@ -90,7 +90,7 @@ var gv_popUpDropFunction = function(p_event) {
 	}
 
 	p_event.preventDefault();
-	
+
 	return false;
 }
 
@@ -294,9 +294,9 @@ function createPopUpControl(p_id, p_startZIndex) {
 
 						var v_popUpToBeClosed = this;
 
-						var v_html = 
+						var v_html =
 							'<div>' +
-							'    Deseja salvar as informações ao fechar a popup?' +
+							'    Do you want to save data before closing this popup?' +
 							'</div>' +
 							'<br />' +
 							'<div>' +
@@ -728,7 +728,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 				},
 				/// <summary>
 				/// Changes the title of the popup.
-				/// </summary> 
+				/// </summary>
 				/// <param name="p_title">The text to be displayed in the header.</param>
 				/// <paramref name="p_title">Takes a string.
 				setTitle: function(p_title) {
@@ -738,7 +738,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 				},
 				/// <summary>
 				/// Shows the popup.
-				/// </summary> 
+				/// </summary>
 				show: function() {
 					if(!this.visible) {
 						this.visible = true;
@@ -750,7 +750,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 				},
 				/// <summary>
 				/// Turns this popup the active one among popups of the controller.
-				/// </summary> 
+				/// </summary>
 				turnActive: function() {
 					if(this.parent.getActivePopUp() == this) {
 						return;
@@ -1220,9 +1220,9 @@ function createPopUpControl(p_id, p_startZIndex) {
 				return;
 			}
 
-			var v_html = 
+			var v_html =
 				'<div>' +
-				'    Deseja remover todas as popups selecionadas?' +
+				'    Do you want to close all selected popups?' +
 				'</div>' +
 				'<br />' +
 				'<div style="text-align: center;">' +
@@ -1297,14 +1297,14 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Count how many popups are selected under this controller.
-		/// </summary> 
+		/// </summary>
 		/// <returns>An integer representing how many are selected.</returns>
 		countSelected: function() {
 			return this.getSelectedPopUps().length;
 		},
 		/// <summary>
 		/// Get the active popup under this controller.
-		/// </summary> 
+		/// </summary>
 		/// <returns>An javascript object representing the popup or null.</returns>
 		getActivePopUp: function() {
 			for(var i = 0; i < this.popUpList.length; i++) {
@@ -1317,10 +1317,10 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Get the popup corresponding to given id, if it exists.
-		/// </summary> 
+		/// </summary>
 		/// <param name="p_id">The id to be searched.</param>
 		/// <paramref name="p_id">Takes a String.
-		/// <returns>An javascript object representing the popup or null.</returns> 
+		/// <returns>An javascript object representing the popup or null.</returns>
 		getPopUpById: function(p_id) {
 			for(var i = 0; i < this.popUpList.length; i++) {
 				if(this.popUpList[i].id == p_id) {
@@ -1332,7 +1332,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Get all selected popups under this controller.
-		/// </summary> 
+		/// </summary>
 		/// <returns>An array containing all selected popups.</returns>
 		getSelectedPopUps: function() {
 			var v_selectedPopUps = [];
@@ -1347,7 +1347,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Get all selected popups under this controller.
-		/// </summary> 
+		/// </summary>
 		/// <returns>An array containing all selected popups.</returns>
 		getSelectedPopUps: function() {
 			var v_selectedPopUps = [];
@@ -1362,7 +1362,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Hides everything in this popup controller.
-		/// </summary> 
+		/// </summary>
 		hideAll: function() {
 			if(!this.minimizedPopUpsContainerElement.classList.contains('hidden-minimized-popups-container')) {
 				this.minimizedPopUpsContainerElement.classList.add('hidden-minimized-popups-container');
@@ -1418,7 +1418,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Order popups of this controller by z-index.
-		/// </summary> 
+		/// </summary>
 		orderPopUpsByZIndex: function() {
 			this.popUpList.sort(function(a, b) {
 				return (a.zIndex > b.zIndex) ? 1 : ((b.zIndex > a.zIndex) ? -1 : 0);
@@ -1426,7 +1426,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Removes everything in this popup controller.
-		/// </summary> 
+		/// </summary>
 		destroy: function() {
 			var v_this = this;
 
@@ -1443,7 +1443,7 @@ function createPopUpControl(p_id, p_startZIndex) {
 		},
 		/// <summary>
 		/// Shows everything in this popup controller.
-		/// </summary> 
+		/// </summary>
 		showAll: function() {
 			if(this.minimizedPopUpsContainerElement.classList.contains('hidden-minimized-popups-container')) {
 				this.minimizedPopUpsContainerElement.classList.remove('hidden-minimized-popups-container');
@@ -1491,13 +1491,13 @@ function createPopUpControl(p_id, p_startZIndex) {
 		'dragover',
 		gv_popUpdragOverFunction,
 		false
-	); 
+	);
 
 	v_popUpControlObject.containerElement.addEventListener(
 		'dragover',
 		gv_popUpdragOverFunction,
 		false
-	); 
+	);
 
 	v_popUpControlObject.containerElement.removeEventListener(
 		'drop',
